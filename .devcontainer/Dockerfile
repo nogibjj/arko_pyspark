@@ -10,5 +10,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app/
 
-RUN python test_main.py
+RUN python src/pyspark_transform.py
 
