@@ -3,13 +3,13 @@ install:
 		pip install -r requirements.txt
 
 test:
-	python -m pytest -vv --cov=main --cov=mylib test_*.py
+	python -m unittest tests/test_pyspark.py
 
 format:	
-	black *.py 
+	black src/*.py tests/*.py
 
 lint:
-	ruff check *.py mylib/*.py
+	ruff check src/*.py tests/*.py
 
 container-lint:
 	docker run --rm -i hadolint/hadolint < .devcontainer/Dockerfile
@@ -18,12 +18,12 @@ refactor: format lint
 
 deploy:
 
-	docker build -f .devcontainer/Dockerfile -t arko_cli_tool:latest .
+	docker build -f .devcontainer/Dockerfile -t arko_pyspark:latest .
 
-	docker rm -f arko_cli_tool
+	docker rm -f arko_pyspark
 
-	docker run -d --name arko_cli_tool -p 80:80 arko_cli_tool:latest
+	docker run -d --name arko_pyspark -p 80:80 arko_pyspark:latest
 
 	echo "Deployment completed."
 		
-all: install lint test format deploy
+all: install format lint test deploy
